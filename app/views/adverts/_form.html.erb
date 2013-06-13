@@ -1,4 +1,5 @@
-<%= form_for(@advert) do |f| %>
+<%= @simple_form_from @advert, :html => { :multipart => true } do |form| %>
+
   <% if @advert.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@advert.errors.count, "error") %> prohibited this advert from being saved:</h2>

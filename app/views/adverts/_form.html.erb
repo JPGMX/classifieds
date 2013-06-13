@@ -1,7 +1,6 @@
-<%= @simple_form_from @advert, :html => { :multipart => true } do |form| %>
-
+<%= simple_form_for @advert, :html => { :multipart => true } do |f| %>
+  
   <%= f.error_notification %>
-
     <div class="form-inputs">
       <% if admin? %>
           <%= f.association :user %>

@@ -2,5 +2,8 @@
 
 <%= render 'form' %>
 
+<% if admin? %>
+
 <%= link_to 'Show', @user %> |
 <%= link_to 'Back', users_path %>
+<%end %>

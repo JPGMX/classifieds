@@ -10,7 +10,7 @@ class SessionController < ApplicationController
   
  if user and user.authenticate(session_user[:password])
      session[:user_id]= user.id	
-	redirect_to root_url, notice: "logged in succesfully"
+	redirect_to my_account_url, notice: "logged in succesfully"
   else
     redirect_to login_url, alert: "Invalid user/password"  
   end

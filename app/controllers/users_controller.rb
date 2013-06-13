@@ -1,6 +1,11 @@
 class UsersController < ApplicationController
   # GET /users
   # GET /users.json
+  #you need to sign up to see the page
+  before_filter :member_required, only:[:edit, :update, :show]
+  before_filter :admin_required, only:[:index, :destroy]  
+  before_filter :set_current_user, only:[:index, :destroy]  
+  
   def index
     @users = User.all
 
@@ -25,26 +30,42 @@ class UsersController < ApplicationController
   # GET /users/new.json
   def new
     @user = User.new
-
+	
+	if current_user && !admin?
+      redirect_to my_account_url
+	else
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @user }
     end
+	end
   end
 
   # GET /users/1/edit
   def edit
+  if admin?
     @user = User.find(params[:id])
+  else
+     @user = current_user
+end	 
+	#@user = User.find(params[:id])
+	#eliminates the number in url
   end
 
   # POST /users
   # POST /users.json
   def create
-    @user = User.new(params[:user])
+  if admin?
+      @user = User.new(params[:user],as: :admin)
+   
+  else  
+ 
+  @user = User.new(params[:user])
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        #this is to avoid holes
+		format.html { redirect_to :root, notice: 'User was successfully created.' }
         format.json { render json: @user, status: :created, location: @user }
       else
         format.html { render action: "new" }
@@ -52,11 +73,11 @@ class UsersController < ApplicationController
       end
     end
   end
-
+end
   # PUT /users/1
   # PUT /users/1.json
   def update
-    @user = User.find(params[:id])
+    @user = current_user
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
@@ -80,4 +101,14 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+  private
+  def set_current_user
+    if admin?
+    @user = User.find(params[:id])
+  else
+     @user = current_user
+end	 
+  end
+  
+  
 end

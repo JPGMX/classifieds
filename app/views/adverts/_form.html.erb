@@ -1,35 +1,20 @@
 <%= @simple_form_from @advert, :html => { :multipart => true } do |form| %>
 
-  <% if @advert.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@advert.errors.count, "error") %> prohibited this advert from being saved:</h2>
+  <%= f.error_notification %>
 
-      <ul>
-      <% @advert.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
+    <div class="form-inputs">
+      <% if admin? %>
+          <%= f.association :user %>
+          <%= f.input :approved %>
       <% end %>
-      </ul>
+      <%= f.input :title %>
+	  <%= f.input :image %>
+      <%= f.input :description %>
+      <%= f.input :contact_details %>
+      <%= f.association :category, as: :radio_buttons %>
     </div>
-  <% end %>
 
-  <div class="field">
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br />
-    <%= f.text_area :description %>
-  </div>
-  <div class="field">
-    <%= f.label :contact_details %><br />
-    <%= f.text_area :contact_details %>
-  </div>
-  <div class="field">
-    <%= f.label :category_id %><br />
-    <%= f.text_field :category_id %>
-  </div>
- 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+    <div class="form-actions">
+      <%= f.button :submit %>
+    </div>
 <% end %>
